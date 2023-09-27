@@ -1,18 +1,17 @@
-from PIL import ImageGrab
-from PIL import Image
+from PIL import ImageGrab, Image
 import time
 import pytesseract
-import time
 import psutil
 import subprocess
 
 # Constants
-LOWER_RED = (110, 0, 0)
-UPPER_RED = (255, 100, 100)
 TASK_NAME = "DarkSoulsRemastered.exe"
 DEATH_LABEL_REGION = (580, 480, 1330, 650)  # (left, top, right, bottom) !!!! ASSUMES 1920:1080
 
 # Functions
+def isRedPixel(pixel):
+    return pixel[0] >= pixel[1]+20 and pixel[0] >= pixel[2]+20
+
 def readDeathCount():
     try:
     # Attempt to open the file for reading
@@ -33,8 +32,8 @@ def getTextFromScreenshot(screenshot):
         for y in range(screenshot.height):
             pixel_color = screenshot.getpixel((x, y))
             # Check if the pixel color is within the red range
-            if LOWER_RED <= pixel_color <= UPPER_RED:
-                # If it's within the range, set the pixel color to red
+            if isRedPixel(pixel_color):
+                # If it's within the range, set the pixel color to black
                 processed.putpixel((x, y), (0, 0, 0))
             else:
                 # If it's not within the range, set the pixel color to white

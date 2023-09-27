@@ -37,7 +37,7 @@ def getTextFromScreenshot(screenshot):
                 # If it's within the range, set the pixel color to red
                 processed.putpixel((x, y), (0, 0, 0))
             else:
-                # If it's not within the range, set the pixel color to white (or any other color)
+                # If it's not within the range, set the pixel color to white
                 processed.putpixel((x, y), (255, 255, 255))
     return pytesseract.image_to_string(processed,config=r'--psm 6')
 def incrementDeathCount(death_count):
@@ -58,7 +58,12 @@ pid = running_game.pid
 
 while psutil.pid_exists(pid):
     # Capture a screenshot in the middle of the screen
-    screenshot = ImageGrab.grab(bbox=DEATH_LABEL_REGION)
+    try:
+        screenshot = ImageGrab.grab(bbox=DEATH_LABEL_REGION)
+    except OSError:
+        print("Couldn't grab screen. Trying again after 5 seconds...")
+        time.sleep(5)
+        continue
     text = getTextFromScreenshot(screenshot)
     # Check if the "YOU DIED" message is detected
     if "YOU DIED" in text:

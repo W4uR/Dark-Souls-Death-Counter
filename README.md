@@ -17,3 +17,4 @@ And put the executable in the game's folder.
 
 ## Usage
 After putting the executable in the game's folder, run the executable as adminsitrator. It should automatically start the game too. For ease of use, you can make a shortcut for the executable.
+The number of times you died is stored in the counter.txt file in the game's folder.
